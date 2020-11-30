@@ -18,10 +18,17 @@ int main(){
         printf("cannot create socket!\n");
         exit(0);
     }
+    printf("socket created!\n");
+
     memset(&servaddr,0,sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = 6666;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    printf("PROTOCOL : %d\t",servaddr.sin_family);
+    printf("PORT :%d\t",servaddr.sin_port);
+    printf("LISTEN ADDRESS : %d\n",ntohl(INADDR_ANY));
+
 
     if((bind(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr))==-1)){
         printf("cannot bind socket!\n");
