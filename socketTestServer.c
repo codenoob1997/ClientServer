@@ -52,7 +52,7 @@ int main(int argc,char **argv){
     printf("=============listening port:%d \n",port);
 
     while(1){
-        if((connfd = connect(listenfd,(struct sockaddr*)NULL,NULL))==-1){
+        if((connfd = accept(listenfd,(struct sockaddr*)NULL,NULL))==-1){
             printf("cannot connect! error:%s    errno:%d\b",strerror(errno),errno);
             continue;
         }
