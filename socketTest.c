@@ -24,44 +24,55 @@ struct sockaddr_in{
 #define MAXLINE 4096 //块对齐？
 #define PORT 6666;
 
-int main(){
-    printf("start!");
-    int listenfd,connfd;
-    struct sockaddr_in servaddr;
-    inet_pton(AF_INET,"192.168.1.1",&servaddr.sin_addr);
-    char recvline[MAXLINE],sendline[MAXLINE];
-    char buf[MAXLINE];
+int main(int argc,char **argv){
+    struct sockaddr_in sockaddr;
+    int sockfd;
+    char sendline[MAXLINE],revline[MAXLINE];
     int n;
-    printf("beginning!!");
-   // printf("=======%d=========",__LINE__);
-    if((listenfd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP) )==-1){
-        printf("cant not create socket!");
+    if(argc<2){
+        printf("please input address: ./server <ip address> <port> \n");
         exit(0);
     }
-    printf("socket create success!");
-    //printf("=======%d=========",__LINE__);
-    memset(&servaddr,0,sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(6666); 
-    /*if(inet_pton(AF_INET,argv[1],&servaddr.sin_addr)<=0){
-        printf("inet_pton error for %s\n",argv[1]);
+    
+    //ip地址和端口
+    char *addr = argv[1];
+    int port = atoi(argv[2]);
+
+
+    if((sockfd = socket(AF_INET,SOCK_STREAM,0))==-1){
+        printf("create socket error : %s  errornumber:%d \n",strerror(errno),errno);
+        exit(0);
     }
-    */
-    if((connfd = connect(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr)))<0){
-        printf("can not connect socket!");
-       // printf("=======%d=========",__LINE__);
+    printf("socket created!\n");
+    printf("Dest IP Address: %s     Port:%d\n",addr,port);
+
+    memset(&sockaddr,0,sizeof(sockaddr));
+    inet_pton(AF_INET,addr,&sockaddr.sin_addr);
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(50000); //centos 7大尾序列
+
+    if(connect(sockfd,(struct sockaddr*)&sockaddr,sizeof(sockaddr))==-1){
+        printf("cannot connect server : %s   error number: %d\n",strerror(errno),errno);
+        exit(0);
     }
-    printf("created!");
-    printf("send msg to server:\n");
+
+    printf("send message to server : ");
 
     fgets(sendline,MAXLINE,stdin);
-    /*if(send(listenfd,sendline,strlen(sendline),0)<0){
-        printf("cannot send message");
+    if((send(sockfd,sendline,strlen(sendline),0))<0){
+        printf("send line error : %s    errornumber:    \n",strerror(errno),errno);
         exit(0);
     }
-    */
-    printf("exiting");
-
-    close(listenfd);
+    close(sockfd);
+    printf("exit\n");
     exit(0);
+
+
+
+
+
+
+
+
+
 }
