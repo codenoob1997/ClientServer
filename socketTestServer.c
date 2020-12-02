@@ -52,14 +52,14 @@ int main(int argc,char **argv){
     printf("=============listening port:%d \n",port);
 
     while(1){
-        if((connfd = accept(listenfd,(struct sockaddr*)NULL,NULL))==-1){
+        if((connfd = accept(listenfd,(struct sockaddr*)NULL,NULL))<0){
             printf("cannot connect! error:%s    errno:%d\b",strerror(errno),errno);
-            continue;
+            exit(1);
         }
         n = recv(connfd,buff,MAXLINE,0);
         buff[n] = '\0';
         printf("Received message from client:%s",buff);
-        close(connfd);
+        
     }
     close(listenfd);
 
