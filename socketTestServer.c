@@ -16,6 +16,8 @@ int main(int argc,char **argv){
     char buff[MAXLINE];
     int n;
     int port;
+    int pid;
+    void interact(int);
 
     if(argc<1){
         printf("./server <port>\n");
@@ -56,11 +58,37 @@ int main(int argc,char **argv){
             printf("cannot connect! error:%s    errno:%d\b",strerror(errno),errno);
             exit(1);
         }
-        n = recv(connfd,buff,MAXLINE,0);
-        buff[n] = '\0';
-        printf("Received message from client:%s",buff);
+        pid = fork();
+        if(pid!=0){
+            close(connfd);
+
+        }
+        else{
+            close(listenfd);
+            interact(connfd);
+            exit(0);
+        }
+
+    }
+    return 0;
+
+}
+
+void interact(int socket){
+    while(1){
+        int n;
+        char buffer[1024];
+        memset(buffer,0,1024);
+        n = read(socket,buffer,1024);
+        if(n<0){
+            printf("error:%s errno:%d\b",strerror(errno),errno);
+            exit(1);
+        }
+        else
+        {
+            printf("Message Received:%s\n",buffer);
+        }
         
     }
-    close(listenfd);
 
 }
