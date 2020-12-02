@@ -57,22 +57,14 @@ int main(int argc,char **argv){
     }
 
     printf("send message to server : ");
-
+while(1){
+    printf("enter message:");
+    memset(sendline,0,MAXLINE);
     fgets(sendline,MAXLINE,stdin);
     if((send(sockfd,sendline,strlen(sendline),0))<0){
         printf("send line error : %s    errornumber:    \n",strerror(errno),errno);
         exit(0);
     }
-    close(sockfd);
-    printf("exit\n");
-    exit(0);
-
-
-
-
-
-
-
-
+}
 
 }
