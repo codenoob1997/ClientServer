@@ -61,7 +61,7 @@ while(1){
     printf("enter message:");
     memset(sendline,0,MAXLINE);
     fgets(sendline,MAXLINE,stdin);
-    if(strcmp(sendline,"quit")==0){
+    if(strcmp(sendline,"quit\n")==0){
         exit(1);
     }
     if((write(sockfd,sendline,strlen(sendline)))<0){
@@ -70,5 +70,6 @@ while(1){
     }
 }
 close(sockfd);
+return 0;
 
 }
