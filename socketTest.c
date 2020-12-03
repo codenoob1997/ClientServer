@@ -56,18 +56,9 @@ int main(int argc,char **argv){
         exit(0);
     }
 
-    printf("send message to server : ");
-while(1){
-    printf("enter message:");
-    memset(sendline,0,MAXLINE);
-    fgets(sendline,MAXLINE,stdin);
-    if(strcmp(sendline,"quit\n")==0){
-        exit(1);
-    }
-    if((write(sockfd,sendline,strlen(sendline)))<0){
-        printf("send line error : %s    errornumber:    \n",strerror(errno),errno);
-        exit(0);
-    }
+printf("send message to server : ");
+while(fgets(sendline,MAXLINE,stdin)!=NULL){
+    write(sockfd,sendline,strlen(sendline));
 }
 close(sockfd);
 return 0;
